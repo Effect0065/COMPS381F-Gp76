@@ -9,6 +9,12 @@
     <body>
         <div class="form-container">
             <h2>SignUp</h2>
+            <% messages.forEach(element => { %>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <%= element %>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <% }) %>
             <form action="/signup" method="post">
                 <div class="form-group">
                     <label for="name">Name:</label>

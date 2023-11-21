@@ -1,18 +1,18 @@
 <div class="d-flex justify-content-between flex-wrap flex-md nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2"><%= customer.firstName  %> <%= customer.lastName  %></h1>
-    <div class="btn-toolbar mb-2 mb-md 0">
+    <!-- <div class="btn-toolbar mb-2 mb-md 0">
         <div class="btn-group me-2">
             <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
             <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
         </div>
-    </div>
+    </div> -->
 </div>
 <div class="col py-3">
     <div class="row">
         <div class="col">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
                 <li class="breadcrumb-item active"><%= customer.firstName  %></li>
                 </ol>
             </nav>
@@ -75,7 +75,7 @@
 </div>
 <div class="pt-1">
     <form action="/delete/<%= customer._id %>?_method=DELETE" method="POST" class="position-relative">
-        <a href="/" type="button" class="btn btn-secondary btn-small">Close</a>
+        <a href="/dashboard" type="button" class="btn btn-secondary btn-small">Close</a>
         <button type="submit" class="btn btn-danger btn-small">Yes, Remove Customer</button>
     </form>
 </div>

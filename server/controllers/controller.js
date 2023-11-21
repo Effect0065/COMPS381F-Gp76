@@ -16,8 +16,13 @@ exports.loginpage = async (req, res) => {
   const locals = {
     title: "Login"
   }
+  const messages = await req.flash("info")
   try {
-    res.render('index', {locals, layout: './layouts/login'})
+    res.render('index', {
+      locals, 
+      layout: './layouts/login', 
+      messages
+    })
   } catch (error) {
     console.log(error);
   }
@@ -33,6 +38,7 @@ exports.postLogin = async (req, res) => {
   try {
     const check = await User.findOne({username: req.body.username});
     if (!check) {
+      req.flash('info', 'Wrong Username')
       res.redirect("/");
     }
 
@@ -44,6 +50,7 @@ exports.postLogin = async (req, res) => {
       console.log("set to true")
       res.redirect('/dashboard')
     } else{
+      req.flash('info', 'Wrong Password')
       res.redirect("/");
     }
   } catch (error) {
@@ -60,8 +67,13 @@ exports.signuppage = async (req, res) => {
   const locals = {
     title: "Signup"
   }
+  const messages = await req.flash("info")
   try {
-    res.render('signup', {locals, layout: './layouts/login'})
+    res.render('signup', {
+      locals, 
+      layout: './layouts/login', 
+      messages
+    })
   } catch (error) {
     console.log(error);
   }
@@ -82,7 +94,8 @@ exports.postSignup = async (req, res) => {
   const existingUser = await User.findOne({username: data.username});
 
   if (existingUser) {
-    res.send("Username has been used. Please choose a different username.");
+    req.flash('info', 'Username has been used. Please choose a different username')
+    res.redirect('/signup')
   } else {
     // Hash password
     const saltRounds = 10; //Number of salt round for bcrypt
@@ -206,7 +219,7 @@ exports.about = async (req, res) => {
     };
   
     try {
-      res.render("about", {locals, layout: './layouts/login'});
+      res.render("about", {locals, layout: './layouts/main'});
     } catch (error) {
       console.log(error);
     }
@@ -222,7 +235,7 @@ exports.about = async (req, res) => {
       description: "Free NodeJs User Management System",
     };
   
-    res.render("customer/add", {locals, layout: './layouts/login'});
+    res.render("customer/add", {locals, layout: './layouts/main'});
   };
   
   /**
@@ -266,7 +279,7 @@ exports.about = async (req, res) => {
       res.render("customer/view", {
         locals,
         customer,
-        layout: './layouts/login'
+        layout: './layouts/main'
       });
     } catch (error) {
       console.log(error);
@@ -289,7 +302,7 @@ exports.about = async (req, res) => {
       res.render("customer/edit", {
         locals,
         customer,
-        layout: './layouts/login'
+        layout: './layouts/main'
       });
     } catch (error) {
       console.log(error);
@@ -334,7 +347,7 @@ exports.about = async (req, res) => {
     res.render("customer/delete", {
       customer,
       locals,
-      layout: './layouts/login'
+      layout: './layouts/main'
     });
   } catch (error) {
     console.log(error);
@@ -380,7 +393,7 @@ exports.about = async (req, res) => {
       res.render("search", {
         customers,
         locals,
-        layout: './layouts/login'
+        layout: './layouts/main'
       });
     } catch (error) {
       console.log(error);
