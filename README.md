@@ -21,6 +21,8 @@ If user pass the authentication, the username used will be stored in seesion.
 In each page after login, users can logout their account by clicking logout button on the bottom-right hand corner of the page.
 
 =================================================================================================================================
+Things After This line remain unchanged (same as Sample.zip)
+=================================================================================================================================
 # CRUD service
 - Create
 -	A restaurant document may contain the following attributes with an example: 
