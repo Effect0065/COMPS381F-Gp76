@@ -136,8 +136,7 @@ exports.dashboardpage = async (req, res) => {
 
   const messages = await req.flash("info");
   const locals = {
-      title: "NodeJs",
-      description: 'Free NodeJs User Management System'
+      title: "Dashboard",
   }
 
   let perPage = 12;
@@ -163,151 +162,88 @@ exports.dashboardpage = async (req, res) => {
   }
 
 }
-
-
-/**
- *  GET /
- *  New Customer Form
- */
-
-exports.addCustomer = async (req, res) => {
-    
-    const locals = {
-        title: "Add New Customer - NodeJs",
-        description: 'Free NodeJs User Management System'
-    }
-
-    res.render('customer/add', locals)
-}
-
-/**
- *  POST /
- *  Create New Customer Form
- */
-
-exports.postCustomer = async (req, res) => {
-
-    console.log(req.body)
-
-    const newCustomer = new Customer({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        tel: req.body.tel,
-        email: req.body.email,
-        details: req.body.details
-    })
-
-    try {
-        await Customer.create(newCustomer);
-        await req.flash('info', "New customer has been added.");
-        res.redirect('/');
-    } catch (error) {
-        console.log(error);
-    }
-
-}
-
-
+  
 /**
  * GET /
- * About
+ * Customer Data
  */
-exports.about = async (req, res) => {
+exports.view = async (req, res) => {
+  try {
+    const customer = await Customer.findOne({ _id: req.params.id });
+
     const locals = {
-      title: "About",
+      title: "View Customer Data",
       description: "Free NodeJs User Management System",
     };
-  
-    try {
-      res.render("about", {locals, layout: './layouts/main'});
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  
-  /**
-   * GET /
-   * New Customer Form
-   */
-  exports.addCustomer = async (req, res) => {
-    const locals = {
-      title: "Add New Customer - NodeJs",
-      description: "Free NodeJs User Management System",
-    };
-  
-    res.render("customer/add", {locals, layout: './layouts/main'});
-  };
-  
-  /**
-   * POST /
-   * Create New Customer
-   */
-  exports.postCustomer = async (req, res) => {
-    console.log(req.body);
-  
-    const newCustomer = new Customer({
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      details: req.body.details,
-      tel: req.body.tel,
-      email: req.body.email,
+
+    res.render("customer/view", {
+      locals,
+      customer,
+      layout: './layouts/main'
     });
+  } catch (error) {
+    console.log(error);
+  }
+};
   
-    try {
-      await Customer.create(newCustomer);
-      await req.flash("info", "New customer has been added.");
-  
-      res.redirect("/");
-    } catch (error) {
-      console.log(error);
-    }
+/**
+ * GET /
+ * New Customer Form
+ */
+exports.addCustomer = async (req, res) => {
+  const locals = {
+    title: "Add New Customer",
   };
+
+  res.render("customer/add", {locals, layout: './layouts/main'});
+};
   
-  /**
-   * GET /
-   * Customer Data
-   */
-  exports.view = async (req, res) => {
-    try {
-      const customer = await Customer.findOne({ _id: req.params.id });
+/**
+ * POST /
+ * Create New Customer
+ */
+exports.postCustomer = async (req, res) => {
+  console.log(req.body);
+
+  const newCustomer = new Customer({
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    details: req.body.details,
+    tel: req.body.tel,
+    email: req.body.email,
+  });
+
+  try {
+    await Customer.create(newCustomer);
+    await req.flash("info", "New customer has been added.");
+
+    res.redirect("/dashboard");
+  } catch (error) {
+    console.log(error);
+  }
+};
   
-      const locals = {
-        title: "View Customer Data",
-        description: "Free NodeJs User Management System",
-      };
-  
-      res.render("customer/view", {
-        locals,
-        customer,
-        layout: './layouts/main'
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  
-  /**
-   * GET /
-   * Edit Customer Data
-   */
-  exports.edit = async (req, res) => {
-    try {
-      const customer = await Customer.findOne({ _id: req.params.id });
-  
-      const locals = {
-        title: "Edit Customer Data",
-        description: "Free NodeJs User Management System",
-      };
-  
-      res.render("customer/edit", {
-        locals,
-        customer,
-        layout: './layouts/main'
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
+/**
+ * GET /
+ * Edit Customer Data
+ */
+exports.edit = async (req, res) => {
+  try {
+    const customer = await Customer.findOne({ _id: req.params.id });
+
+    const locals = {
+      title: "Edit Customer Data",
+    };
+
+    res.render("customer/edit", {
+      locals,
+      customer,
+      layout: './layouts/main'
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
   
   /**
    * GET /
@@ -330,18 +266,17 @@ exports.about = async (req, res) => {
       console.log(error);
     }
   };
-  
- /**
-   * GET /
-   * Delete Customer Data
-   */
- exports.delete = async (req, res) => {
+
+/**
+ * GET /
+ * Delete Customer Data
+ */
+exports.delete = async (req, res) => {
   try {
     const customer = await Customer.findOne({ _id: req.params.id });
 
     const locals = {
       title: "Delete Customer Data",
-      description: "Free NodeJs User Management System",
     };
 
     res.render("customer/delete", {
@@ -354,49 +289,64 @@ exports.about = async (req, res) => {
   }
 };
 
-  /**
-   * Delete /
-   * Delete Customer Data
-   */
-  exports.deletePost = async (req, res) => {
-    try {
-      await Customer.deleteOne({ _id: req.params.id });
-      await req.flash('info', "Customer record has been deleted.");
-      res.redirect("/");
-      console.log(req.params.id);
-    } catch (error) {
-      console.log(error);
-    }
+/**
+ * Delete /
+ * Delete Customer Data
+ */
+exports.deletePost = async (req, res) => {
+  try {
+    await Customer.deleteOne({ _id: req.params.id });
+    await req.flash('info', "Customer record has been deleted.");
+    res.redirect("/dashboard");
+    console.log(req.params.id);
+  } catch (error) {
+    console.log(error);
+  }
+};
+  
+/**
+ * Get /
+ * Search Customer Data
+ */
+exports.searchCustomers = async (req, res) => {
+  const locals = {
+    title: "Search Customer Data",
   };
+
+  try {
+    let searchTerm = req.body.searchTerm;
+    const searchNoSpecialChar = searchTerm.replace(/[^a-zA-Z0-9 ]/g, "");
+
+    const customers = await Customer.find({
+      $or: [
+        { firstName: { $regex: new RegExp(searchNoSpecialChar, "i") } },
+        { lastName: { $regex: new RegExp(searchNoSpecialChar, "i") } },
+      ],
+    });
+
+    res.render("search", {
+      customers,
+      locals,
+      layout: './layouts/main'
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
   
-  /**
-   * Get /
-   * Search Customer Data
-   */
-  exports.searchCustomers = async (req, res) => {
-    const locals = {
-      title: "Search Customer Data",
-      description: "Free NodeJs User Management System",
-    };
-  
-    try {
-      let searchTerm = req.body.searchTerm;
-      const searchNoSpecialChar = searchTerm.replace(/[^a-zA-Z0-9 ]/g, "");
-  
-      const customers = await Customer.find({
-        $or: [
-          { firstName: { $regex: new RegExp(searchNoSpecialChar, "i") } },
-          { lastName: { $regex: new RegExp(searchNoSpecialChar, "i") } },
-        ],
-      });
-  
-      res.render("search", {
-        customers,
-        locals,
-        layout: './layouts/main'
-      });
-    } catch (error) {
-      console.log(error);
-    }
+/**
+ * GET /
+ * About
+ */
+exports.about = async (req, res) => {
+  const locals = {
+    title: "About",
+    description: "Free NodeJs User Management System",
   };
-  
+
+  try {
+    res.render("about", {locals, layout: './layouts/main'});
+  } catch (error) {
+    console.log(error);
+  }
+};
