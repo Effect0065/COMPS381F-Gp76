@@ -3,9 +3,12 @@ Customer Record Management System
 
 Group: 76
 Name: 
-Li Victor (13224696)
+Li Victor 		(13224696)
+Choi Kam Ming	(13252394)
+Chan Wing San	(13430013)
 
 Application link: 
+https://three81sample.onrender.com
 
 =================================================================================================================================
 # Login & Register
@@ -147,9 +150,9 @@ In this project, there are three HTTP request types, post, get and delete.
 	Path URL: /api/delete/:id
 	For curl (Mac / Linux)
 	```
-	curl --request DELETE --location 'localhost:5000/api/delete/655e43dba52b9529daebcccb'
+	curl --request DELETE --location 'localhost:5000/api/delete/655e44813ec1cba6be6f3dc7'
 	```
 	For Window PowerShell
 	```
-	$response = Invoke-WebRequest -Uri "http://localhost:5000/api/delete/655e43dba52b9529daebcccb" -Method Delete
+	$response = Invoke-WebRequest -Uri "http://localhost:5000/api/delete/655e44813ec1cba6be6f3dc7" -Method Delete
 	```
