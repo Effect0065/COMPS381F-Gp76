@@ -7,6 +7,9 @@ const app = express();
 const bcrypt = require('bcrypt');
 const User = require("../models/Register");
 
+const bodyParser = require('body-parser');
+const { trace } = require('../routes/routes');
+
 /** 
  *  GET /
  *  Login page
@@ -170,6 +173,7 @@ exports.dashboardpage = async (req, res) => {
 exports.view = async (req, res) => {
   try {
     const customer = await Customer.findOne({ _id: req.params.id });
+    const messages = await req.flash("info");
 
     const locals = {
       title: "View Customer Data",
@@ -179,6 +183,7 @@ exports.view = async (req, res) => {
     res.render("customer/view", {
       locals,
       customer,
+      messages,
       layout: './layouts/main'
     });
   } catch (error) {
@@ -230,6 +235,7 @@ exports.postCustomer = async (req, res) => {
 exports.edit = async (req, res) => {
   try {
     const customer = await Customer.findOne({ _id: req.params.id });
+    const messages = await req.flash("info");
 
     const locals = {
       title: "Edit Customer Data",
@@ -238,6 +244,7 @@ exports.edit = async (req, res) => {
     res.render("customer/edit", {
       locals,
       customer,
+      messages,
       layout: './layouts/main'
     });
   } catch (error) {
@@ -259,9 +266,8 @@ exports.edit = async (req, res) => {
         details: req.body.details,
         updatedAt: Date.now(),
       });
-      await res.redirect(`/edit/${req.params.id}`);
-  
-      console.log("redirected");
+      await req.flash("info", "Edit Success.");
+      await res.redirect(`/view/${req.params.id}`);
     } catch (error) {
       console.log(error);
     }
@@ -350,3 +356,71 @@ exports.about = async (req, res) => {
     console.log(error);
   }
 };
+
+/**
+ *  Restful API
+ */
+exports.addAPI = async (req, res) => {
+  console.log("API Post: Request")
+  const newCustomer = new Customer({
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    details: req.body.details,
+    tel: req.body.tel,
+    email: req.body.email,
+  });
+  try {
+    const savedPost = await Customer.create(newCustomer);
+    console.log("API Post Reply: " + savedPost)
+    res.json(savedPost);
+  } catch (error) {
+    res.json({message: error});
+  }
+}
+
+exports.searchAPI = async (req, res) => {
+  console.log("API Search: Request")
+  try {
+    const customer = await Customer.findOne({ _id: req.params.id });
+    console.log("API Search: Reply: " + customer)
+    res.json(customer);
+  } catch (error) {
+    console.log("API Search: Failed: " + error)
+  }
+}
+
+exports.updateAPI = async (req, res) => {
+  console.log("API Update: Request")
+  try {
+    await Customer.findByIdAndUpdate(req.params.id,{
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      tel: req.body.tel,
+      email: req.body.email,
+      details: req.body.details,
+      updatedAt: Date.now(),
+    });
+    
+    const updatedPost = await Customer.findOne({ _id: req.params.id });
+    console.log(updatedPost)
+    res.json(updatedPost);
+  } catch (error) {
+    res.json(error);
+  }
+}
+
+exports.deleteAPI = async (req, res) => {
+  console.log("Delete API: Request");
+  const customer = await Customer.findOne({ _id: req.params.id });
+  if (customer){
+    try {
+      await Customer.deleteOne({ _id: req.params.id });
+      console.log("Deleted: " + req.params.id);
+      res.json("Deleted " + req.params.id);
+    } catch (error) {
+      console.log(error);
+    }
+  } else {
+    res.json("Cannot find " + req.params.id);
+  }
+}

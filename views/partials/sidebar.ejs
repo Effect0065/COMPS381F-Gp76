@@ -1,21 +1,35 @@
 <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-    <div class="position-sticky pt-3 sidebar-sticky">
-      <ul class="nav flex-column">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/dashboard">
-            <i class="bi bi-house"></i>
-            Dashboard
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/about">
-            <i class="bi bi-patch-question"></i>
-            About
-          </a>
-        </li>
-      </ul>
-    </div>
-    <form action="/logout" method="POST">
-      <button class="logout-btn btn btn-danger">Logout</a>
-    </form>
-  </nav>
+  <div class="position-sticky pt-3 sidebar-sticky">
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a class="sidebar-dashboard nav-link" aria-current="page" href="/dashboard">
+          <i class="bi bi-house"></i>
+          Dashboard
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="sidebar-about nav-link" href="/about">
+          <i class="bi bi-patch-question"></i>
+          About
+        </a>
+      </li>
+    </ul>
+  </div>
+  <form action="/logout" method="POST">
+    <button class="logout-btn btn btn-danger">Logout</a>
+  </form>
+</nav>
+
+<script>
+  let path = location.pathname;
+  var dashboardSwitch = document.querySelector('.sidebar-dashboard');
+  var aboutSwitch = document.querySelector('.sidebar-about');
+  console.log(path)
+  if (path == "/dashboard") {
+    console.log("dash")
+    dashboardSwitch.classList.add('active');
+  } else if (path == "/about") {
+    console.log("about")
+    aboutSwitch.classList.add('active');
+  }
+</script>

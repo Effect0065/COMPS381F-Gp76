@@ -25,6 +25,11 @@
   
   </div>
   
+  <% messages.forEach(element => { %>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <%= element %>
+    </div>
+  <% }) %>
   
   <form action="/edit/<%= customer._id %>?_method=PUT" method="POST">
   

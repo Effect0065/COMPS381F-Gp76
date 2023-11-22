@@ -30,6 +30,10 @@ const store = new MongoDBSession({
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// RESTFUL API
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+
 // Static Files
 app.use(express.static('public'));
 

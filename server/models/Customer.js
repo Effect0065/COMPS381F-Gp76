@@ -19,6 +19,10 @@ const CustomerSchema = new Schema({
         type: String,
         required: true
     },
+    details: {
+        type: String,
+        require: false
+    },
     createdAt: {
         type: Date,
         default: Date.now()

@@ -30,4 +30,10 @@ router.post('/delete/:id', Controller.deletePost);
 
 router.post('/search', Controller.searchCustomers);
 
+// RESTful API
+router.get('/api/search/:id', Controller.searchAPI)
+router.post('/api/insert', Controller.addAPI)
+router.patch('/api/update/:id', Controller.updateAPI)
+router.delete('/api/delete/:id', Controller.deleteAPI)
+
 module.exports = router;
